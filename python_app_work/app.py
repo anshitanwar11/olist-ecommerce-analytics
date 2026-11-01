@@ -1,4 +1,16 @@
 """Home page and login entry point for Olist Sales & Customer Analytics."""
+"""Home page and login entry point for Olist Sales & Customer Analytics"""
+
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from src import config, data_loader, theme
+from src import dashboard as dash
+from src.analysis import build_kris
+from src.app_data import get_data, get_orders
 import streamlit as st
 from src import config, data_loader, theme
 from src import dashboard as dash
