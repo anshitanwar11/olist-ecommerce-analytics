@@ -12,10 +12,6 @@ from src import dashboard as dash
 from src.analysis import build_kris
 from src.app_data import get_data, get_orders
 import streamlit as st
-from src import config, data_loader, theme
-from src import dashboard as dash
-from src.analysis import build_kris
-from src.app_data import get_data, get_orders
 from src.auth import require_login
 
 st.set_page_config(page_title="Olist Sales & Customer Analytics", page_icon="📊", layout="wide")
