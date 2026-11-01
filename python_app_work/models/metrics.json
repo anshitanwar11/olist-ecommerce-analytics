@@ -1,0 +1,185 @@
+{
+  "project": "Olist Sales & Customer Analytics",
+  "target": "not_satisfied = 1 when review_score <= 3; satisfied = 0 when review_score is 4-5",
+  "positive_class": "not satisfied (score 1-3)",
+  "selected_model": "Random Forest",
+  "n_rows": 98672,
+  "n_features": 24,
+  "class_counts": {
+    "0": 76054,
+    "1": 22618
+  },
+  "accuracy": 0.7785153280972891,
+  "balanced_accuracy": 0.5270044070903362,
+  "precision": 0.6852300242130751,
+  "recall": 0.0625552608311229,
+  "f1": 0.11464452096414827,
+  "roc_auc": 0.6492558101508861,
+  "cv_accuracy_mean": 0.7792036616350531,
+  "cv_accuracy_std": 0.001130728171152206,
+  "cv_auc_mean": 0.6395223751674198,
+  "cv_auc_std": 0.003152944573995252,
+  "model_comparison": [
+    {
+      "model": "Random Forest",
+      "cv_accuracy_mean": 0.7792036616350531,
+      "cv_accuracy_std": 0.0010113540219081397,
+      "cv_balanced_accuracy": 0.5268802620043975,
+      "cv_precision": 0.7159714221440173,
+      "cv_recall": 0.060959379822510984,
+      "cv_f1": 0.11234169432973407,
+      "cv_auc": 0.6395223751674198
+    },
+    {
+      "model": "Logistic Regression",
+      "cv_accuracy_mean": 0.7790896389577175,
+      "cv_accuracy_std": 0.0008235681848733162,
+      "cv_balanced_accuracy": 0.5291555386380743,
+      "cv_precision": 0.6836482487896086,
+      "cv_recall": 0.06764660013310378,
+      "cv_f1": 0.12308775142980055,
+      "cv_auc": 0.6147459312516474
+    },
+    {
+      "model": "Extra Trees",
+      "cv_accuracy_mean": 0.7785702483220978,
+      "cv_accuracy_std": 0.0006198978307859576,
+      "cv_balanced_accuracy": 0.5234793284532941,
+      "cv_precision": 0.7401592743731057,
+      "cv_recall": 0.0524482069099408,
+      "cv_f1": 0.09793718138809349,
+      "cv_auc": 0.636057285011699
+    },
+    {
+      "model": "Balanced Logistic Regression",
+      "cv_accuracy_mean": 0.6337331779478996,
+      "cv_accuracy_std": 0.005824127362748135,
+      "cv_balanced_accuracy": 0.5817426903210772,
+      "cv_precision": 0.30957847624002194,
+      "cv_recall": 0.4857411080974116,
+      "cv_f1": 0.3781377695040971,
+      "cv_auc": 0.6152063532221242
+    }
+  ],
+  "confusion_matrix": [
+    [
+      15081,
+      130
+    ],
+    [
+      4241,
+      283
+    ]
+  ],
+  "classification_report": {
+    "satisfied": {
+      "precision": 0.7805092640513405,
+      "recall": 0.9914535533495497,
+      "f1-score": 0.8734254191642776,
+      "support": 15211.0
+    },
+    "not_satisfied": {
+      "precision": 0.6852300242130751,
+      "recall": 0.0625552608311229,
+      "f1-score": 0.11464452096414827,
+      "support": 4524.0
+    },
+    "accuracy": 0.7785153280972891,
+    "macro avg": {
+      "precision": 0.7328696441322078,
+      "recall": 0.5270044070903362,
+      "f1-score": 0.49403497006421293,
+      "support": 19735.0
+    },
+    "weighted avg": {
+      "precision": 0.7586676992665261,
+      "recall": 0.7785153280972891,
+      "f1-score": 0.6994844623131307,
+      "support": 19735.0
+    }
+  },
+  "dummy_baseline": {
+    "accuracy": 0.7707626045097542,
+    "roc_auc": 0.5
+  },
+  "linear_baseline": {
+    "rmse": 1.3038133236762046,
+    "mae": 1.0226131691223805,
+    "r2": 0.059589235471951496
+  },
+  "split": "80/20 stratified train/test split",
+  "cv_folds": 5,
+  "feature_timing": "Order-time features only. Excludes actual delivery outcomes, order status, review text, review timestamps and target review score.",
+  "feature_selection": {
+    "method": "ANOVA and chi-square screening, numeric correlation and VIF diagnostics.",
+    "high_numeric_correlations_ge_0_80": 2,
+    "numeric_features_vif_ge_5": 3
+  },
+  "late_delivery_model": {
+    "target": "late = delivered after estimated date",
+    "n_test_rows": 19291,
+    "accuracy": 0.6528432948006843,
+    "balanced_accuracy": 0.6176856688555898,
+    "precision": 0.12993942890106722,
+    "recall": 0.5757188498402556,
+    "f1": 0.2120249441110719,
+    "roc_auc": 0.6620989943113471,
+    "cv_auc_mean": 0.6539050637307324,
+    "confusion_matrix": [
+      [
+        11693,
+        6033
+      ],
+      [
+        664,
+        901
+      ]
+    ],
+    "classification_report": {
+      "on_time": {
+        "precision": 0.9462652747430607,
+        "recall": 0.6596524878709241,
+        "f1-score": 0.7773825748761759,
+        "support": 17726.0
+      },
+      "late": {
+        "precision": 0.12993942890106722,
+        "recall": 0.5757188498402556,
+        "f1-score": 0.2120249441110719,
+        "support": 1565.0
+      },
+      "accuracy": 0.6528432948006843,
+      "macro avg": {
+        "precision": 0.5381023518220639,
+        "recall": 0.6176856688555898,
+        "f1-score": 0.4947037594936239,
+        "support": 19291.0
+      },
+      "weighted avg": {
+        "precision": 0.8800400946724206,
+        "recall": 0.6528432948006844,
+        "f1-score": 0.731517420547868,
+        "support": 19291.0
+      }
+    },
+    "available": true,
+    "n_rows": 96452,
+    "class_counts": {
+      "0": 88626,
+      "1": 7826
+    },
+    "feature_timing": "Order-time predictors only; actual delivery and estimated dates are target labels."
+  },
+  "delivery_time_model": {
+    "available": true,
+    "target": "delivery days = delivered timestamp minus purchase timestamp",
+    "n_rows": 96452,
+    "n_test_rows": 19291,
+    "rmse": 8.540789018681004,
+    "mae": 5.331341299324946,
+    "r2": 0.2136485513291917,
+    "split": "80/20 holdout; order-time features only"
+  },
+  "data_mode": "sql",
+  "data_source_message": "Loaded the eight clean tables from SQL Server database PRP_OLIST_PROJECT."
+}
