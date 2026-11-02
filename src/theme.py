@@ -10,7 +10,12 @@ from pathlib import Path
 import streamlit as st
 
 ROOT = Path(__file__).resolve().parents[1]
-LOGO_FILE = ROOT / "assets" / "olist_logo.png"
+LOGO_FILE = next(
+    (p for p in (ROOT / "assets" / "olist_logo.png",
+                 ROOT / "python_app_work" / "assets" / "olist_logo.png")
+     if p.exists()),
+    ROOT / "assets" / "olist_logo.png",
+)
 
 # ---- Palette -------------------------------------------------------------------------------
 NAVY = "#1B2A6B"          # titles and main text
