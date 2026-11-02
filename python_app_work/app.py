@@ -4,7 +4,11 @@
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
+APP_DIR = Path(__file__).resolve().parent          # python_app_work/
+PROJECT_ROOT = APP_DIR.parent                      # repository root
+for p in (str(APP_DIR), str(PROJECT_ROOT)):        # works whether src sits here or one level up
+    if p not in sys.path:
+        sys.path.insert(0, p)
 
 from src import config, data_loader, theme
 from src import dashboard as dash
