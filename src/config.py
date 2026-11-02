@@ -45,7 +45,7 @@ N_CV_FOLDS = 5
 LOW_REVIEW_MAX_SCORE = 3  # Scores 1–3 are not satisfied; scores 4–5 are satisfied.
 
 TABLES = {
-    "order_360": "order_360.csv",
+        "order_360": "order_360.csv.gz",
     "customer_360": "customer_360.csv",
     "seller_360": "seller_360.csv",
     "items": "items.csv",
