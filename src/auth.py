@@ -25,7 +25,7 @@ def require_login():
     st.title('Olist Sales & Customer Analytics')
     st.subheader('Sign in')
     if not users:
-        st.error('Login is not configured. Create .streamlit/secrets.toml from .streamlit/secrets.toml.example and set your own password.')
+        st.error('Login is not configured. Add the [users] section under Settings > Secrets in Streamlit Cloud (or create .streamlit/secrets.toml on your computer).')
         st.code('[users]\nmy_user_id = "choose-a-strong-password"',language='toml')
         st.stop()
     with st.form('login_form'):
@@ -34,7 +34,7 @@ def require_login():
         submitted=st.form_submit_button('Log in')
     if submitted:
         stored=users.get(user)
-        if stored is not None and hmac.compare_digest(str(stored),str(password)):
+        if stored is not None and hmac.compare_digest(str(stored).encode('utf-8'),str(password).encode('utf-8')):
             st.session_state['logged_in']=True; st.session_state['user']=user; st.rerun()
         st.error('Incorrect user ID or password.')
     st.stop()
