@@ -1,7 +1,7 @@
-"""Load the eight cleaned Olist tables from SQL Server (Windows Authentication) or from CSV exports.
+"""Load the cleaned Olist tables from SQL Server (Windows Authentication) or from CSV exports.
 
 source="sql"     -> read clean.<table> from database PRP_OLIST_PROJECT
-source="extract" -> read data/extracts/<table>.csv
+source="extract" -> read data/extracts/<table>.csv (or <table>.csv.gz)
 source="auto"    -> SQL Server when a server is configured, otherwise (or if SQL fails) the CSV extracts.
 No synthetic data is ever generated here.
 """
@@ -11,9 +11,22 @@ from src import config
 
 _STATUS = {"mode": "uninitialized", "message": "Data has not been loaded."}
 
+# geolocation is very large and is not used by the dashboard pages, so it may be missing.
+OPTIONAL_TABLES = {"geolocation"}
+
+
+def _find_file(filename: str):
+    """Return the CSV path, or the compressed .gz version of it, or None."""
+    for name in (filename, filename + ".gz"):
+        path = config.EXTRACT_DIR / name
+        if path.is_file():
+            return path
+    return None
+
 
 def missing_extracts() -> list[str]:
-    return [filename for filename in config.TABLES.values() if not (config.EXTRACT_DIR / filename).is_file()]
+    return [filename for key, filename in config.TABLES.items()
+            if key not in OPTIONAL_TABLES and _find_file(filename) is None]
 
 
 def data_status() -> dict[str, str]:
@@ -47,18 +60,22 @@ def _load_csv() -> dict[str, pd.DataFrame]:
     if missing:
         raise FileNotFoundError(
             "Real Olist extracts are missing from data/extracts: " + ", ".join(missing)
-            + ". Configure SQL Server in .streamlit/secrets.toml or copy the eight clean CSV exports into that folder "
-            "(python -m src.export_extracts creates them from SQL Server). Synthetic data is never used.")
+            + ". Configure SQL Server in .streamlit/secrets.toml or copy the clean CSV exports into that folder. "
+            "Synthetic data is never used.")
     data = {}
     for key, filename in config.TABLES.items():
-        frame = pd.read_csv(config.EXTRACT_DIR / filename, low_memory=False)
+        path = _find_file(filename)
+        if path is None:                      # optional table that was not exported
+            data[key] = pd.DataFrame()
+            continue
+        frame = pd.read_csv(path, low_memory=False)   # .csv.gz is read directly
         frame.columns = [str(c).strip() for c in frame.columns]
         data[key] = frame
     return data
 
 
 def load_all(source: str | None = None) -> dict[str, pd.DataFrame]:
-    """Load all eight real tables or fail with an explicit message."""
+    """Load all real tables or fail with an explicit message."""
     global _STATUS
     source = (source or config.DATA_SOURCE or "auto").lower()
     if source not in {"auto", "sql", "extract"}:
@@ -67,7 +84,7 @@ def load_all(source: str | None = None) -> dict[str, pd.DataFrame]:
     if source in {"auto", "sql"}:
         try:
             data = _load_sql()
-            _STATUS = {"mode": "sql", "message": f"Loaded the eight clean tables from SQL Server database {config.SQL_DATABASE}."}
+            _STATUS = {"mode": "sql", "message": f"Loaded the clean tables from SQL Server database {config.SQL_DATABASE}."}
             return data
         except Exception as exc:  # noqa: BLE001 - report the reason, then fall back only in auto mode
             sql_error = exc
@@ -79,5 +96,5 @@ def load_all(source: str | None = None) -> dict[str, pd.DataFrame]:
         if sql_error is not None:
             raise FileNotFoundError(f"{exc} (SQL Server attempt failed: {sql_error})") from exc
         raise
-    _STATUS = {"mode": "extract", "message": "Loaded all eight real Olist CSV extracts."}
+    _STATUS = {"mode": "extract", "message": "Loaded the real Olist CSV extracts."}
     return data
